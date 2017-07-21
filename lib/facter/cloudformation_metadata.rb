@@ -102,10 +102,13 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
 
   # outputs: boolean
   chunk :is_first_member_of_autoscaling_group, :require => :autoscaling_group_local_ipv4s do |autoscaling_group_local_ipv4s|
+    metadata = {}
     local_ipv4 = Facter.value(:ec2_metadata)['local-ipv4']
-    setcode do
-      local_ipv4 == autoscaling_group_local_ipv4s.first && !local_ipv4.nil?
+    begin
+      metadata['is_first_member_of_autoscaling_group'] =
+        local_ipv4 == autoscaling_group_local_ipv4s.first && !local_ipv4.nil?
     end
+    metadata
   end
 
   # outputs string
