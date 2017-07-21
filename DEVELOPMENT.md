@@ -1,4 +1,4 @@
-# module name 
+# salekseev-cloudformationfacts
 
 ## Module development setup
 
