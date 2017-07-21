@@ -12,6 +12,7 @@ pkg/
 .fixtures.yml
 .git
 .gitignore
+*/.gitkeep
 .puppet-lint.rc
 .rubocop.yml
 .rubocop_todo.yml
