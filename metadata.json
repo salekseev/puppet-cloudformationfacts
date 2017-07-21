@@ -1,0 +1,14 @@
+{
+  "name": "salekseev-cloudformationfacts",
+  "version": "0.1.0",
+  "author": "Stas Alekseev",
+  "summary": "Puppet module providing AWS CloudFormation metadata facts",
+  "license": "Apache-2.0",
+  "source": "https://github.com/salekseev/puppet-cloudformationfacts",
+  "project_page": "https://forge.puppetlabs.com/salekseev/cloudformationfacts",
+  "issues_url": "https://github.com/salekseev/puppet-cloudformationfacts/issues",
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=3.2.0 <5.0.0" }
+  ],
+  "data_provider": null
+}
