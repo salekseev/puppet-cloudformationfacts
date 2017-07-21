@@ -28,6 +28,7 @@ group :development do
     gem "travis-lint"
     gem "puppet-blacksmith"
     gem 'puppet-debugger'
+    gem 'rubocop', '~> 0.49.1', require: false
 # This gem causes bundler install erorrs
 #    gem "guard-rake"
 end
