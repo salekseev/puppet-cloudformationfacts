@@ -22,7 +22,10 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
     metadata = {}
     instance_id = Facter.value(:ec2_metadata)['instance-id']
     region = Facter.value(:ec2_metadata)['placement']['availability-zone'][0..-2]
-    ec2 = Aws::EC2::Client.new(region: region)
+    ec2 = Aws::EC2::Client.new(
+      region: region,
+      retry_limit: 10
+      )
     begin
       resp = ec2.describe_tags(
         filters: [{
@@ -45,7 +48,7 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
       end
     rescue Aws::EC2::Errors::ServiceError => e
       # rescues all errors returned by Amazon Elastic Compute Cloud
-      Facter::Core::Logging.warn("Failure in cloudformation.autoscaling-groupname fact: #{e}")
+      puts "Failure in cloudformation.autoscaling-groupname fact: #{e}"
       nil
     end
     metadata
@@ -57,7 +60,10 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
     metadata['autoscaling-group-local-ipv4s'] = []
     instance_id = Facter.value(:ec2_metadata)['instance-id']
     region = Facter.value(:ec2_metadata)['placement']['availability-zone'][0..-2]
-    ec2 = Aws::EC2::Client.new(region: region)
+    ec2 = Aws::EC2::Client.new(
+      region: region,
+      retry_limit: 10
+      )
     begin
       resp = ec2.describe_tags(
         filters: [{
@@ -94,7 +100,7 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
       end
     rescue Aws::EC2::Errors::ServiceError => e
       # rescues all errors returned by Amazon Elastic Compute Cloud
-      Facter::Core::Logging.warn("Failure in cloudformation.autoscaling-group-local-ipv4s fact: #{e}")
+      puts "Failure in cloudformation.autoscaling-group-local-ipv4s fact: #{e}"
       nil
     end
     metadata
@@ -129,7 +135,10 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
     metadata = {}
     instance_id = Facter.value(:ec2_metadata)['instance-id']
     region = Facter.value(:ec2_metadata)['placement']['availability-zone'][0..-2]
-    ec2 = Aws::EC2::Client.new(region: region)
+    ec2 = Aws::EC2::Client.new(
+      region: region,
+      retry_limit: 10
+      )
     begin
       resp = ec2.describe_tags(
         filters: [{
@@ -152,7 +161,7 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
       end
     rescue Aws::EC2::Errors::ServiceError => e
       # rescues all errors returned by Amazon Elastic Compute Cloud
-      Facter::Core::Logging.warn("Failure in cloudformation.stack-name fact: #{e}")
+      puts "Failure in cloudformation.stack-name fact: #{e}"
       nil
     end
     metadata
@@ -164,7 +173,10 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
     metadata['stack-local-ipv4s'] = []
     instance_id = Facter.value(:ec2_metadata)['instance-id']
     region = Facter.value(:ec2_metadata)['placement']['availability-zone'][0..-2]
-    ec2 = Aws::EC2::Client.new(region: region)
+    ec2 = Aws::EC2::Client.new(
+      region: region,
+      retry_limit: 10
+      )
     begin
       resp = ec2.describe_tags(
         filters: [{
@@ -201,7 +213,7 @@ Facter.add(:cloudformation_metadata, :type => :aggregate) do
       end
     rescue Aws::EC2::Errors::ServiceError => e
       # rescues all errors returned by Amazon Elastic Compute Cloud
-      Facter::Core::Logging.warn("Failure in cloudformation.stack-local-ipv4s fact: #{e}")
+      puts "Failure in cloudformation.stack-local-ipv4s fact: #{e}"
       nil
     end
     metadata
