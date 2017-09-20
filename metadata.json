@@ -1,6 +1,6 @@
 {
   "name": "salekseev-cloudformationfacts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Stas Alekseev <stas.alekseev@gmail.com>",
   "summary": "Puppet module providing AWS CloudFormation metadata facts",
   "license": "Apache-2.0",
