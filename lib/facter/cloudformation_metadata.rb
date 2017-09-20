@@ -5,7 +5,7 @@ Facter.add(:cloudformation_metadata) do
   # is available
   confine do
     begin
-      require 'aws-sdk'
+      require 'aws-sdk-core'
       true
     rescue LoadError
       false
@@ -21,7 +21,6 @@ Facter.add(:cloudformation_metadata) do
     metadata = {}
 
     instance_id = Facter.value(:ec2_metadata)['instance-id']
-    local_ipv4 = Facter.value(:ec2_metadata)['local-ipv4']
     region = Facter.value(:ec2_metadata)['placement']['availability-zone'][0..-2]
     ec2 = Aws::EC2::Client.new(region: region, retry_limit: 10)
 
@@ -57,7 +56,6 @@ Facter.add(:cloudformation_metadata) do
     end
 
     # outputs: array
-    metadata['autoscaling-group-local-ipv4s'] = []
     begin
       resp = ec2.describe_tags(
         filters: [
@@ -86,6 +84,7 @@ Facter.add(:cloudformation_metadata) do
             },
           ],
         )
+        metadata['autoscaling-group-local-ipv4s'] = []
         resp2[:reservations].each do |reservations|
           reservations[:instances].each do |instances|
             instances[:network_interfaces].each do |network_interfaces|
@@ -102,19 +101,6 @@ Facter.add(:cloudformation_metadata) do
       # rescues all errors returned by Amazon Elastic Compute Cloud
       puts "Failure in cloudformation.autoscaling-group-local-ipv4s fact: #{e}"
       nil
-    end
-
-    # outputs: boolean
-    begin
-      metadata['is_first_member_of_autoscaling_group'] =
-        (local_ipv4 == metadata['autoscaling-group-local-ipv4s'].first && !local_ipv4.nil?)
-    end
-
-    # outputs: boolean
-    autoscaling_group_last_local_ipv4 = metadata['autoscaling-group-local-ipv4s'].last
-    begin
-      metadata['is_last_member_of_autoscaling_group'] =
-        (local_ipv4 == autoscaling_group_last_local_ipv4 && !local_ipv4.nil?)
     end
 
     # outputs: string
@@ -149,7 +135,6 @@ Facter.add(:cloudformation_metadata) do
     end
 
     # outputs: array
-    metadata['stack-local-ipv4s'] = []
     begin
       resp = ec2.describe_tags(
         filters: [
@@ -178,6 +163,7 @@ Facter.add(:cloudformation_metadata) do
             },
           ],
         )
+        metadata['stack-local-ipv4s'] = []
         resp2[:reservations].each do |reservations|
           reservations[:instances].each do |instances|
             instances[:network_interfaces].each do |network_interfaces|
