@@ -1,5 +1,0 @@
-fixtures:
-    symlinks:
-      puppet-cloudformationfacts: "#{source_dir}"
-    repositories:
-    forge_modules:

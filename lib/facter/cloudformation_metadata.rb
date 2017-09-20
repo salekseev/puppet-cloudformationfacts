@@ -5,7 +5,7 @@ Facter.add(:cloudformation_metadata) do
   # is available
   confine do
     begin
-      require 'aws-sdk-core'
+      require 'aws-sdk'
       true
     rescue LoadError
       false
@@ -28,16 +28,20 @@ Facter.add(:cloudformation_metadata) do
     # outputs: string
     begin
       resp = ec2.describe_tags(
-        filters: [{
-          name: 'resource-type',
-          values: ['instance']
-        }, {
-          name: 'resource-id',
-          values: [instance_id]
-        }, {
-          name: 'key',
-          values: ['aws:autoscaling:groupName']
-        }]
+        filters: [
+          {
+            name: 'resource-type',
+            values: ['instance'],
+          },
+          {
+            name: 'resource-id',
+            values: [instance_id],
+          },
+          {
+            name: 'key',
+            values: ['aws:autoscaling:groupName'],
+          },
+        ],
       )
       if resp.tags.length.zero?
         nil
@@ -56,25 +60,31 @@ Facter.add(:cloudformation_metadata) do
     metadata['autoscaling-group-local-ipv4s'] = []
     begin
       resp = ec2.describe_tags(
-        filters: [{
-          name: 'resource-type',
-          values: ['instance']
-        }, {
-          name: 'resource-id',
-          values: [instance_id]
-        }, {
-          name: 'key',
-          values: ['aws:autoscaling:groupName']
-        }]
+        filters: [
+          {
+            name: 'resource-type',
+            values: ['instance'],
+          },
+          {
+            name: 'resource-id',
+            values: [instance_id],
+          },
+          {
+            name: 'key',
+            values: ['aws:autoscaling:groupName'],
+          },
+        ],
       )
       if resp.tags.length.zero?
         nil
       elsif resp.tags.length == 1
         resp2 = ec2.describe_instances(
-          filters: [{
-            name: 'tag:aws:autoscaling:groupName',
-            values: [resp[:tags][0][:value]]
-          }]
+          filters: [
+            {
+              name: 'tag:aws:autoscaling:groupName',
+              values: [resp[:tags][0][:value]],
+            },
+          ],
         )
         resp2[:reservations].each do |reservations|
           reservations[:instances].each do |instances|
@@ -110,16 +120,20 @@ Facter.add(:cloudformation_metadata) do
     # outputs: string
     begin
       resp = ec2.describe_tags(
-        filters: [{
-          name: 'resource-type',
-          values: ['instance']
-        }, {
-          name: 'resource-id',
-          values: [instance_id]
-        }, {
-          name: 'key',
-          values: ['aws:cloudformation:stack-name']
-        }]
+        filters: [
+          {
+            name: 'resource-type',
+            values: ['instance'],
+          },
+          {
+            name: 'resource-id',
+            values: [instance_id],
+          },
+          {
+            name: 'key',
+            values: ['aws:cloudformation:stack-name'],
+          },
+        ],
       )
       if resp.tags.length.zero?
         nil
@@ -138,25 +152,31 @@ Facter.add(:cloudformation_metadata) do
     metadata['stack-local-ipv4s'] = []
     begin
       resp = ec2.describe_tags(
-        filters: [{
-          name: 'resource-type',
-          values: ['instance']
-        }, {
-          name: 'resource-id',
-          values: [instance_id]
-        }, {
-          name: 'key',
-          values: ['aws:cloudformation:stack-id']
-        }]
+        filters: [
+          {
+            name: 'resource-type',
+            values: ['instance'],
+          },
+          {
+            name: 'resource-id',
+            values: [instance_id],
+          },
+          {
+            name: 'key',
+            values: ['aws:cloudformation:stack-id'],
+          },
+        ],
       )
       if resp.tags.length.zero?
         nil
       elsif resp.tags.length == 1
         resp2 = ec2.describe_instances(
-          filters: [{
-            name: 'tag:aws:cloudformation:stack-id',
-            values: [resp[:tags][0][:value]]
-          }]
+          filters: [
+            {
+              name: 'tag:aws:cloudformation:stack-id',
+              values: [resp[:tags][0][:value]],
+            },
+          ],
         )
         resp2[:reservations].each do |reservations|
           reservations[:instances].each do |instances|
@@ -177,7 +197,5 @@ Facter.add(:cloudformation_metadata) do
     end
 
     metadata
-
   end
-
 end
